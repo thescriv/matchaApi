@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HelloWorld API GET /hello_world/classic_get do fetch getHelloWorld 1`] = `
+Object {
+  "body": Object {
+    "message": "Hello World",
+  },
+  "status": 200,
+}
+`;
+
+exports[`HelloWorld API POST /hello_world/classic_http do fetch postHelloWorld 1`] = `
+Object {
+  "body": Object {
+    "message": "Hello World undefined",
+  },
+  "status": 200,
+}
+`;
