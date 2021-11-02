@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 const { startApi } = require('./src/api')
 
 async function main() {

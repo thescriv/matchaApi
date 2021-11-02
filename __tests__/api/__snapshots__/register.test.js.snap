@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Register API POST /register do register user 1`] = `
+Object {
+  "body": Object {},
+  "status": 200,
+}
+`;

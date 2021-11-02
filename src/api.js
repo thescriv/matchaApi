@@ -6,8 +6,7 @@ const cors = require('@koa/cors')
 
 const { handleErrorMiddleware } = require('./middleware/handleError')
 
-const helloWorldRouter = require('./api/helloWorld/helloWorld.index')
-const errorOnPurposeRouter = require('./api/errorOnPurpose/errorOnPurpose.index')
+const registerRouter = require('./api/register/register.index')
 
 const config = require('./config')
 
@@ -23,8 +22,7 @@ async function startApi(port) {
 
   app.use(handleErrorMiddleware)
 
-  app.use(helloWorldRouter)
-  app.use(errorOnPurposeRouter)
+  app.use(registerRouter)
 
   server = app.listen(port || config.API_PORT, () => {
     console.log(`Listening on port ${port || config.API_PORT}`)

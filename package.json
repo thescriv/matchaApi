@@ -1,5 +1,5 @@
 {
-  "name": "koasetup",
+  "name": "matchaapi",
   "jest": {
     "testMatch": [
       "**/__tests__/**/*.test.js"
@@ -17,15 +17,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thescriv/KoaSetup.git"
+    "url": "git+https://github.com/thescriv/matchaApi.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/thescriv/KoaSetup/issues"
+    "url": "https://github.com/thescriv/matchaApi/issues"
   },
-  "homepage": "https://github.com/thescriv/KoaSetup#readme",
+  "homepage": "https://github.com/thescriv/matchaApi#readme",
   "dependencies": {
     "@koa/cors": "^3.1.0",
     "@koa/router": "^10.1.0",
