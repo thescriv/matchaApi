@@ -4,6 +4,8 @@ const dotenv = require('dotenv')
 const bodyParser = require('koa-bodyparser')
 const cors = require('@koa/cors')
 
+const { createConnection } = require('./helpers/db')
+
 const { handleErrorMiddleware } = require('./middleware/handleError')
 
 const registerRouter = require('./api/register/register.index')
@@ -16,6 +18,8 @@ async function startApi(port) {
   const app = new Koa()
 
   dotenv.config()
+
+  await createConnection()
 
   app.use(bodyParser())
   app.use(cors())
