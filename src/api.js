@@ -4,7 +4,7 @@ const dotenv = require('dotenv')
 const bodyParser = require('koa-bodyparser')
 const cors = require('@koa/cors')
 
-const { createConnection } = require('./helpers/db')
+const { createConnection, closeConnection } = require('./helpers/db')
 
 const { handleErrorMiddleware } = require('./middleware/handleError')
 
@@ -34,7 +34,10 @@ async function startApi(port) {
 }
 
 async function stopApi() {
-  await new Promise((resolve) => server.close(resolve))
+  await Promise.all([
+    new Promise((resolve) => server.close(resolve)),
+    closeConnection()
+  ])
 
   console.log('Closing server...')
 }
