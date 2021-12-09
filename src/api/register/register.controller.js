@@ -1,8 +1,7 @@
-const crypto = require('crypto')
 const createError = require('http-errors')
-const { ObjectId } = require('mongodb')
 
 const { db } = require('../../helpers/db')
+const { hashString } = require('../../helpers/hash')
 
 const { validateRegisterController } = require('./register.schema')
 
@@ -23,24 +22,12 @@ async function postRegisterController(ctx) {
     })
   }
 
-  const userId = new ObjectId()
+  const secretKey = hashString(body.email + body.password)
 
-  const secretKey =
-    crypto
-      .createHash('sha256')
-      .update(body.email + body.password)
-      .digest('hex') +
-    ';' +
-    userId
-
-  const userPassword = crypto
-    .createHash('sha256')
-    .update(body.password)
-    .digest('hex')
+  const userPassword = hashString(body.password)
 
   const newUser = {
     ...body,
-    _id: userId,
     password: userPassword,
     secret_key: secretKey
   }

@@ -1,18 +1,28 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Register API POST /register do not register user (email already exist) 1`] = `
+Object {
+  "body": Object {
+    "help": "Sorry nickname already taken.",
+    "message": "Nickname already taken",
+  },
+  "status": 400,
+}
+`;
+
+exports[`Register API POST /register do not register user (validationFail) 1`] = `
+Object {
+  "body": Object {
+    "help": "email should be string",
+    "message": "email should be string",
+  },
+  "status": 400,
+}
+`;
+
 exports[`Register API POST /register do register user 1`] = `
 Object {
   "body": Object {},
   "status": 200,
 }
-`;
-
-exports[`Register API POST /register do register user 2`] = `
-Array [
-  Object {
-    "email": "test@test.com",
-    "password": "7bcf9d89298f1bfae16fa02ed6b61908fd2fa8de45dd8e2153a3c47300765328",
-    "secret_key": "cb6dafd74b30b02ce6199fadde90f8a9068d7065e2cad2191b801b1ab6fd6482;61956cd85c4dd7d8e17fde10",
-  },
-]
 `;

@@ -12,10 +12,14 @@ function createValidator(schema) {
     if (!isValid) {
       const firstError = ajvValidator.errors[0]
 
+      const dataPath = firstError.dataPath.replace(/\./, '')
+
+      const message = dataPath + ' ' + firstError.message
+
       const error = {
-        param_name: firstError.dataPath,
+        param_name: dataPath,
         keyword: firstError.keyword,
-        message: firstError.message.replace(/\./, ''),
+        message,
         details: firstError.params
       }
 

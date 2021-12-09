@@ -11,7 +11,7 @@ async function handleErrorMiddleware(ctx, next) {
       help: err?.help || errorMessage
     }
 
-    console.error(error)
+    console.log(err)
 
     ctx.body = error
   }

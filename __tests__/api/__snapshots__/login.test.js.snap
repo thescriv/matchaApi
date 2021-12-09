@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login API POST /login do login 1`] = `
+Object {
+  "body": Object {},
+  "status": 200,
+}
+`;

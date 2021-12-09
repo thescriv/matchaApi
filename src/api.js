@@ -9,6 +9,7 @@ const { createConnection, closeConnection } = require('./helpers/db')
 const { handleErrorMiddleware } = require('./middleware/handleError')
 
 const registerRouter = require('./api/register/register.index')
+const loginRouter = require('./api/login/login.index')
 
 const config = require('./config')
 
@@ -27,6 +28,7 @@ async function startApi(port) {
   app.use(handleErrorMiddleware)
 
   app.use(registerRouter)
+  app.use(loginRouter)
 
   server = app.listen(port || config.API_PORT, () => {
     console.log(`Listening on port ${port || config.API_PORT}`)
