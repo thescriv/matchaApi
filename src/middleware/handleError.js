@@ -1,3 +1,5 @@
+const config = require('../config')
+
 async function handleErrorMiddleware(ctx, next) {
   try {
     await next()
@@ -11,7 +13,9 @@ async function handleErrorMiddleware(ctx, next) {
       help: err?.help || errorMessage
     }
 
-    console.log(err)
+    if (config.MIDDLEWARE_ERROR_LOGGER) {
+      console.log(err)
+    }
 
     ctx.body = error
   }

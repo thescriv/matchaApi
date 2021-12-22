@@ -4,11 +4,14 @@ const config = require('../config')
 const client = new MongoClient(config.MONGO_URL)
 
 let dbPromise
+let dbName
 
-async function createConnection() {
+async function createConnection(databaseName = config.MONGO_DATABASE_NAME) {
   if (dbPromise) {
     return dbPromise
   }
+
+  dbName = databaseName
 
   console.log('Initalize connection to Database...')
   dbPromise = await client.connect()
@@ -29,7 +32,7 @@ function closeConnection() {
 }
 
 function users() {
-  return client.db(config.MONGO_DATABASE_NAME).collection('users')
+  return client.db(dbName).collection('users')
 }
 
 module.exports = { createConnection, closeConnection, db: { users } }

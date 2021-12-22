@@ -29,7 +29,8 @@ async function postRegisterController(ctx) {
   const newUser = {
     ...body,
     password: userPassword,
-    secret_key: secretKey
+    secret_key: secretKey,
+    create_at: Date.now()
   }
 
   await db.users().insertOne(newUser)

@@ -1,5 +1,8 @@
 const crypto = require('crypto')
-const { db } = require('../src/helpers/db')
+const MockDate = require('mockDate')
+
+const config = require('../src/config')
+const { createConnection, db } = require('../src/helpers/db')
 
 function mockCrypto() {
   jest.spyOn(crypto, 'createHash').mockImplementation(() => {
@@ -15,25 +18,42 @@ function mockCrypto() {
   })
 }
 
-async function testCatchError(callbackFunction) {
-  let error
-  try {
-    await callbackFunction()
-  } catch (err) {
-    error = err.response
+function mockDate() {
+  MockDate.set(new Date('2020-02-09T10:30:00.000Z'))
+}
+
+function restoreDate() {
+  MockDate.reset()
+}
+
+class createTestUniverse {
+  constructor() {}
+
+  mockUniverse() {
+    restoreDate()
+
+    mockCrypto()
+    mockDate()
   }
 
-  return error
-}
+  async connectToDatabaseWorker() {
+    await createConnection(`test-${config.JEST_WORKER_ID}`)
+  }
 
-async function deleteDatabase() {
-  await db.users().deleteMany({})
-}
+  async testCatchError(callbackFunction) {
+    let error
+    try {
+      await callbackFunction()
+    } catch (err) {
+      error = err.response
+    }
 
-function createTestUniverse() {
-  mockCrypto()
+    return error
+  }
 
-  return { testCatchError, deleteDatabase }
+  async deleteDatabase() {
+    await db.users().deleteMany({})
+  }
 }
 
 module.exports = { createTestUniverse }

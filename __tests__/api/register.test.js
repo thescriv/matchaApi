@@ -7,24 +7,31 @@ const { db } = require('../../src/helpers/db')
 
 let client
 let testCatchError
+let deleteDatabase
+let universe
 
 describe('Register API', () => {
   beforeAll(async () => {
+    universe = new createTestUniverse()
+
+    testCatchError = universe.testCatchError
+    deleteDatabase = universe.deleteDatabase
+
+    await universe.connectToDatabaseWorker()
+
     await startApi(3000)
 
     client = new apiClient(3000)
   })
 
-  beforeEach(() => {
-    const universe = createTestUniverse()
-
-    testCatchError = universe.testCatchError
+  beforeEach(async () => {
+    await universe.mockUniverse()
   })
 
   afterEach(async () => {
     jest.restoreAllMocks()
 
-    await db.users().deleteMany({})
+    await deleteDatabase()
   })
 
   afterAll(async () => {
@@ -54,9 +61,7 @@ describe('Register API', () => {
     })
 
     test('do not register user (email already exist)', async () => {
-      await db
-        .users()
-        .insertOne({ email: 'test@test.com', password: 'aaaaaaaa' })
+      await db.users().insertOne(registerPayload)
 
       const { body, status } = await testCatchError(() =>
         client.postRegister(registerPayload)

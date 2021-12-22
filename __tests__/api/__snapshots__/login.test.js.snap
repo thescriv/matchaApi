@@ -6,3 +6,13 @@ Object {
   "status": 200,
 }
 `;
+
+exports[`Login API POST /login do not login (email or password is bad) 1`] = `
+Object {
+  "body": Object {
+    "help": "user not found",
+    "message": "user not found",
+  },
+  "status": 404,
+}
+`;
