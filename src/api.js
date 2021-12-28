@@ -6,6 +6,7 @@ const cors = require('@koa/cors')
 
 const { createConnection, closeConnection } = require('./helpers/db')
 
+const { globalMiddleware } = require('./middleware/globalMiddleware')
 const { handleErrorMiddleware } = require('./middleware/handleError')
 
 const registerRouter = require('./api/register/register.index')
@@ -25,6 +26,7 @@ async function startApi(port) {
   app.use(bodyParser())
   app.use(cors())
 
+  app.use(globalMiddleware)
   app.use(handleErrorMiddleware)
 
   app.use(registerRouter)

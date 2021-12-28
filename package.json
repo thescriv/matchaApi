@@ -33,8 +33,10 @@
     "ajv": "^6.12.6",
     "dotenv": "^10.0.0",
     "http-errors": "^1.8.0",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
+    "lodash": "^4.17.21",
     "mongodb": "^4.1.4",
     "superagent": "^6.1.0"
   },

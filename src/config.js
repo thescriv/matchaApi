@@ -4,5 +4,6 @@ module.exports = {
   MIDDLEWARE_ERROR_LOGGER: process.env.MIDDLEWARE_ERROR_LOGGER === true,
   MONGO_URL: process.env.MONGO_URL || 'mongodb://root:password@localhost:27017',
   MONGO_DATABASE_NAME: process.env.MONGO_DATABASE_NAME || 'test1',
-  JEST_WORKER_ID: process.env.JEST_WORKER_ID
+  JEST_WORKER_ID: process.env.JEST_WORKER_ID,
+  JWT_SECRET_KEY: process.env.JWT_SECRET_KEY || 'foobar'
 }

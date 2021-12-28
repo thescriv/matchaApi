@@ -4,6 +4,8 @@ const { apiClient } = require('../apiClient')
 const { createTestUniverse } = require('../utils')
 
 const { db } = require('../../src/helpers/db')
+const { decodeJwtToken } = require('../../src/helpers/jwt')
+const { ObjectId } = require('mongodb')
 
 let client
 let testCatchError
@@ -42,29 +44,35 @@ describe('Login API', () => {
     let loginPayload
 
     beforeEach(() => {
-      loginPayload = {
+      userPayload = {
         email: 'test@test.com',
         password: 'aaaaaaaa'
       }
     })
 
     test('do login', async () => {
-      await db
-        .users()
-        .insertOne({ email: 'test@test.com', password: 'aaaaaaaa' })
+      await client.postRegister(userPayload)
 
-      const { body, status } = await client.postLogin(loginPayload)
-      expect({ body, status }).toMatchSnapshot()
+      const { body, status } = await client.postLogin(userPayload)
+
+      const user = await db.users().findOne()
+
+      const tokenPayload = decodeJwtToken(body.token)
+
+      expect(user._id.equals(new ObjectId(tokenPayload.user_id))).toBe(true)
+      expect(status).toBe(200)
     })
 
     test('do not login (email or password is bad)', async () => {
       await db.users().deleteMany({})
 
       const { body, status } = await testCatchError(() =>
-        client.postLogin(loginPayload)
+        client.postLogin(userPayload)
       )
 
-      expect({ body, status }).toMatchSnapshot()
+      expect(body.message).toBe('user not found')
+
+      expect(status).toBe(404)
     })
   })
 })

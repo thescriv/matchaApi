@@ -27,7 +27,9 @@ function restoreDate() {
 }
 
 class createTestUniverse {
-  constructor() {}
+  constructor() {
+    config.MIDDLEWARE_ERROR_LOGGER = false
+  }
 
   mockUniverse() {
     restoreDate()

@@ -17,8 +17,8 @@ async function postRegisterController(ctx) {
     .countDocuments({ email: body.email })
 
   if (emailAlreadyExist) {
-    throw createError(400, 'Nickname already taken', {
-      help: 'Sorry nickname already taken.'
+    throw createError(400, 'Email already taken', {
+      help: 'Sorry email already taken.'
     })
   }
 
