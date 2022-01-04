@@ -1,34 +1,11 @@
-const crypto = require('crypto')
-const MockDate = require('mockDate')
-
 const config = require('../src/config')
 const { createConnection, db } = require('../src/helpers/db')
 
-function mockCrypto() {
-  jest.spyOn(crypto, 'createHash').mockImplementation(() => {
-    return {
-      update: () => {
-        return {
-          digest: () => {
-            return 'aaaaaaaa'
-          }
-        }
-      }
-    }
-  })
-}
-
-function mockDate() {
-  MockDate.set(new Date('2020-02-09T10:30:00.000Z'))
-}
-
-function restoreDate() {
-  MockDate.reset()
-}
+const { mockCrypto, mockDate, restoreDate, mockDatabase } = require('./mocker')
 
 class createTestUniverse {
   constructor() {
-    config.MIDDLEWARE_ERROR_LOGGER = false
+    config.MIDDLEWARE_ERROR_LOGGER = true
   }
 
   mockUniverse() {
@@ -36,6 +13,10 @@ class createTestUniverse {
 
     mockCrypto()
     mockDate()
+  }
+
+  async seedDatabase(askedSeeds) {
+    await mockDatabase(askedSeeds)
   }
 
   async connectToDatabaseWorker() {

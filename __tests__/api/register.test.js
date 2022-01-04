@@ -1,7 +1,7 @@
 const { startApi, stopApi } = require('../../src/api')
 const { apiClient } = require('../apiClient')
 
-const { createTestUniverse } = require('../utils')
+const { createTestUniverse } = require('../testUniverse')
 
 const { db } = require('../../src/helpers/db')
 

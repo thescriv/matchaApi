@@ -3,6 +3,11 @@ const superagent = require('superagent')
 class apiClient {
   constructor(port) {
     this.apiUrl = `localhost:${port}`
+    this.token = null
+  }
+
+  useToken(token) {
+    this.token = token
   }
 
   async postRegister(payload) {
@@ -13,6 +18,14 @@ class apiClient {
 
   async postLogin(payload) {
     const res = await superagent.post(`${this.apiUrl}/login`).send(payload)
+
+    return res
+  }
+
+  async getUser() {
+    const res = await superagent
+      .get(`${this.apiUrl}/user`)
+      .set('Authorization', `Bearer ${this.token}`)
 
     return res
   }

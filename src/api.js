@@ -8,9 +8,11 @@ const { createConnection, closeConnection } = require('./helpers/db')
 
 const { globalMiddleware } = require('./middleware/globalMiddleware')
 const { handleErrorMiddleware } = require('./middleware/handleError')
+const { authMiddleware } = require('./middleware/authMiddleware')
 
 const registerRouter = require('./api/register/register.index')
 const loginRouter = require('./api/login/login.index')
+const userRouter = require('./api/user/user.index')
 
 const config = require('./config')
 
@@ -28,9 +30,11 @@ async function startApi(port) {
 
   app.use(globalMiddleware)
   app.use(handleErrorMiddleware)
+  app.use(authMiddleware)
 
   app.use(registerRouter)
   app.use(loginRouter)
+  app.use(userRouter)
 
   server = app.listen(port || config.API_PORT, () => {
     console.log(`Listening on port ${port || config.API_PORT}`)

@@ -11,8 +11,6 @@ function createJwtToken(userId, userSecretKey) {
     }
   )
 
-  // console.log(jwt.verify(token, config.JWT_SECRET_KEY + userSecretKey, {algorithm: 'HS256'}))
-
   return token
 }
 
@@ -22,7 +20,20 @@ function decodeJwtToken(token) {
   return tokenPayload
 }
 
+function verifyJwtToken(token, userSecretKey) {
+  console.log('verifying token')
+  try {
+    jwt.verify(token, config.JWT_SECRET_KEY + userSecretKey, {
+      algorithm: 'HS256'
+    })
+  } catch (err) {
+    return false
+  }
+  return true
+}
+
 module.exports = {
   createJwtToken,
-  decodeJwtToken
+  decodeJwtToken,
+  verifyJwtToken
 }

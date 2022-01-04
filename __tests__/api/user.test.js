@@ -12,7 +12,7 @@ let testCatchError
 let deleteDatabase
 let universe
 
-describe('Login API', () => {
+describe('User API', () => {
   beforeAll(async () => {
     universe = new createTestUniverse()
 
@@ -21,9 +21,9 @@ describe('Login API', () => {
 
     await universe.connectToDatabaseWorker()
 
-    await startApi(3001)
+    await startApi(3002)
 
-    client = new apiClient(3001)
+    client = new apiClient(3002)
   })
 
   beforeEach(async () => {
@@ -40,9 +40,7 @@ describe('Login API', () => {
     await stopApi()
   })
 
-  describe('POST /login', () => {
-    let loginPayload
-
+  describe('GET /', () => {
     beforeEach(() => {
       userPayload = {
         email: 'test@test.com',
@@ -50,29 +48,24 @@ describe('Login API', () => {
       }
     })
 
-    test('do login', async () => {
+    test('do get me', async () => {
       await client.postRegister(userPayload)
 
-      const { body, status } = await client.postLogin(userPayload)
+      const {
+        body: { token: bodyToken },
+        status: status1
+      } = await client.postLogin(userPayload)
+
+      client.useToken(bodyToken)
+
+      const { body, status } = await client.getUser()
 
       const user = await db.users().findOne()
 
-      const tokenPayload = decodeJwtToken(body.token)
-
-      expect(user._id.equals(new ObjectId(tokenPayload.user_id))).toBe(true)
+      expect(status1).toBe(200)
       expect(status).toBe(200)
-    })
 
-    test('do not login (email or password is bad)', async () => {
-      await db.users().deleteMany({})
-
-      const { body, status } = await testCatchError(() =>
-        client.postLogin(userPayload)
-      )
-
-      expect(body.message).toBe('user not found')
-
-      expect(status).toBe(404)
+      expect(user._id.equals(new ObjectId(body._id))).toBe(true)
     })
   })
 })

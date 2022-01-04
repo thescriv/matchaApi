@@ -30,7 +30,7 @@ async function postRegisterController(ctx) {
     ...body,
     password: userPassword,
     secret_key: secretKey,
-    create_at: Date.now()
+    created_at: Date.now()
   }
 
   await db.users().insertOne(newUser)
