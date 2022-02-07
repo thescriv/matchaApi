@@ -1,9 +1,10 @@
 const createError = require('http-errors')
 
 const { db } = require('../../helpers/db')
-const { hashString } = require('../../helpers/hash')
 
 const { validateRegisterController } = require('./register.schema')
+
+const { createNewUser } = require('./register.lib')
 
 async function postRegisterController(ctx) {
   const {
@@ -22,16 +23,7 @@ async function postRegisterController(ctx) {
     })
   }
 
-  const secretKey = hashString(body.email + body.password)
-
-  const userPassword = hashString(body.password)
-
-  const newUser = {
-    ...body,
-    password: userPassword,
-    secret_key: secretKey,
-    created_at: Date.now()
-  }
+  const newUser = createNewUser(body)
 
   await db.users().insertOne(newUser)
 

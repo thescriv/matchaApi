@@ -1,7 +1,7 @@
 const { startApi, stopApi } = require('../../src/api')
-const { apiClient } = require('../apiClient')
+const { ApiClient } = require('../ApiClient')
 
-const { createTestUniverse } = require('../testUniverse')
+const { CreateTestUniverse } = require('../testUniverse')
 
 const { db } = require('../../src/helpers/db')
 
@@ -12,7 +12,7 @@ let universe
 
 describe('Register API', () => {
   beforeAll(async () => {
-    universe = new createTestUniverse()
+    universe = new CreateTestUniverse()
 
     testCatchError = universe.testCatchError
     deleteDatabase = universe.deleteDatabase
@@ -21,7 +21,7 @@ describe('Register API', () => {
 
     await startApi(3000)
 
-    client = new apiClient(3000)
+    client = new ApiClient(3000)
   })
 
   beforeEach(async () => {

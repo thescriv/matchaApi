@@ -3,7 +3,7 @@ const { createConnection, db } = require('../src/helpers/db')
 
 const { mockCrypto, mockDate, restoreDate, mockDatabase } = require('./mocker')
 
-class createTestUniverse {
+class CreateTestUniverse {
   constructor() {
     config.MIDDLEWARE_ERROR_LOGGER = true
   }
@@ -39,4 +39,4 @@ class createTestUniverse {
   }
 }
 
-module.exports = { createTestUniverse }
+module.exports = { CreateTestUniverse }

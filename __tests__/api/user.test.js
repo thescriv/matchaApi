@@ -1,33 +1,44 @@
 const { startApi, stopApi } = require('../../src/api')
-const { apiClient } = require('../apiClient')
+const { ApiClient } = require('../ApiClient')
 
-const { createTestUniverse } = require('../testUniverse')
+const { CreateTestUniverse } = require('../testUniverse')
 
 const { db } = require('../../src/helpers/db')
-const { decodeJwtToken } = require('../../src/helpers/jwt')
+// const { decodeJwtToken } = require('../../src/helpers/jwt')
 const { ObjectId } = require('mongodb')
 
 let client
-let testCatchError
 let deleteDatabase
 let universe
 
 describe('User API', () => {
   beforeAll(async () => {
-    universe = new createTestUniverse()
+    universe = new CreateTestUniverse()
 
-    testCatchError = universe.testCatchError
     deleteDatabase = universe.deleteDatabase
 
     await universe.connectToDatabaseWorker()
 
-    await startApi(3002)
+    await startApi(3004)
 
-    client = new apiClient(3002)
+    client = new ApiClient(3004)
   })
 
   beforeEach(async () => {
     await universe.mockUniverse()
+
+    const userPayload = {
+      email: 'test@test.com',
+      password: 'aaaaaaaa'
+    }
+
+    await client.postRegister(userPayload)
+
+    const {
+      body: { token: bodyToken }
+    } = await client.postLogin(userPayload)
+
+    client.useToken(bodyToken)
   })
 
   afterEach(async () => {
@@ -41,31 +52,34 @@ describe('User API', () => {
   })
 
   describe('GET /', () => {
-    beforeEach(() => {
-      userPayload = {
-        email: 'test@test.com',
-        password: 'aaaaaaaa'
-      }
-    })
-
     test('do get me', async () => {
-      await client.postRegister(userPayload)
-
-      const {
-        body: { token: bodyToken },
-        status: status1
-      } = await client.postLogin(userPayload)
-
-      client.useToken(bodyToken)
-
       const { body, status } = await client.getUser()
 
       const user = await db.users().findOne()
 
-      expect(status1).toBe(200)
       expect(status).toBe(200)
 
       expect(user._id.equals(new ObjectId(body._id))).toBe(true)
+    })
+  })
+
+  describe('POST /', () => {
+    test('do update my profile', async () => {
+      const updaterUserPayload = {
+        first_name: 'John',
+        last_name: 'Lennon'
+      }
+
+      const { status } = await client.postUser(updaterUserPayload)
+
+      const user = await db.users().findOne({})
+
+      console.log(user)
+
+      expect(user.first_name).toBe('John')
+      expect(user.last_name).toBe('Lennon')
+
+      expect(status).toBe(204)
     })
   })
 })

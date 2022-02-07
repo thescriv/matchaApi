@@ -1,7 +1,7 @@
 const { startApi, stopApi } = require('../../src/api')
-const { apiClient } = require('../apiClient')
+const { ApiClient } = require('../ApiClient')
 
-const { createTestUniverse } = require('../testUniverse')
+const { CreateTestUniverse } = require('../testUniverse')
 
 const { db } = require('../../src/helpers/db')
 const { decodeJwtToken } = require('../../src/helpers/jwt')
@@ -14,7 +14,7 @@ let universe
 
 describe('Login API', () => {
   beforeAll(async () => {
-    universe = new createTestUniverse()
+    universe = new CreateTestUniverse()
 
     testCatchError = universe.testCatchError
     deleteDatabase = universe.deleteDatabase
@@ -23,7 +23,7 @@ describe('Login API', () => {
 
     await startApi(3001)
 
-    client = new apiClient(3001)
+    client = new ApiClient(3001)
   })
 
   beforeEach(async () => {
@@ -41,7 +41,7 @@ describe('Login API', () => {
   })
 
   describe('POST /login', () => {
-    let loginPayload
+    let userPayload
 
     beforeEach(() => {
       userPayload = {

@@ -1,7 +1,7 @@
 const { startApi, stopApi } = require('../../src/api')
-const { apiClient } = require('../apiClient')
+const { ApiClient } = require('../ApiClient')
 
-const { createTestUniverse } = require('../testUniverse')
+const { CreateTestUniverse } = require('../testUniverse')
 
 const { db } = require('../../src/helpers/db')
 const { createJwtToken } = require('../../src/helpers/jwt')
@@ -15,7 +15,7 @@ let seedDatabase
 
 describe('Middleware API', () => {
   beforeAll(async () => {
-    universe = new createTestUniverse()
+    universe = new CreateTestUniverse()
 
     deleteDatabase = universe.deleteDatabase
     seedDatabase = universe.seedDatabase
@@ -24,7 +24,7 @@ describe('Middleware API', () => {
 
     await startApi(3003)
 
-    client = new apiClient(3003)
+    new ApiClient(3003)
   })
 
   beforeEach(async () => {
@@ -99,6 +99,8 @@ describe('Middleware API', () => {
 
     test('do not pass auth token signature is invalid', async () => {
       await db.users().updateMany({}, { $set: { secret_key: 'foobar' } })
+
+      let error
 
       try {
         await authMiddleware(ctxMockedFn, nextMockedFn)

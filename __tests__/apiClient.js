@@ -1,6 +1,6 @@
 const superagent = require('superagent')
 
-class apiClient {
+class ApiClient {
   constructor(port) {
     this.apiUrl = `localhost:${port}`
     this.token = null
@@ -29,6 +29,15 @@ class apiClient {
 
     return res
   }
+
+  async postUser(payload) {
+    const res = await superagent
+      .post(`${this.apiUrl}/user`)
+      .set('Authorization', `Bearer ${this.token}`)
+      .send(payload)
+
+    return res
+  }
 }
 
-module.exports = { apiClient }
+module.exports = { ApiClient }
