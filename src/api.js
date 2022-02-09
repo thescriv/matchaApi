@@ -16,7 +16,7 @@ const userRouter = require('./api/user/user.index')
 
 const config = require('./config')
 
-let server
+let server = null
 
 async function startApi(port) {
   const app = new Koa()
@@ -43,7 +43,12 @@ async function startApi(port) {
 
 async function stopApi() {
   await Promise.all([
-    new Promise((resolve) => server.close(resolve)),
+    new Promise((resolve) => {
+      if (server) {
+        server.close(resolve)
+      }
+      resolve()
+    }),
     closeConnection()
   ])
 

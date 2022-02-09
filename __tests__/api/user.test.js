@@ -1,32 +1,21 @@
-const { startApi, stopApi } = require('../../src/api')
-const { ApiClient } = require('../ApiClient')
-
-const { CreateTestUniverse } = require('../testUniverse')
-
-const { db } = require('../../src/helpers/db')
-// const { decodeJwtToken } = require('../../src/helpers/jwt')
 const { ObjectId } = require('mongodb')
 
+const { startApi } = require('../../src/api')
+
+const { db } = require('../../src/helpers/db')
+
+const { ApiClient } = require('../ApiClient')
+
 let client
-let deleteDatabase
-let universe
 
 describe('User API', () => {
   beforeAll(async () => {
-    universe = new CreateTestUniverse()
-
-    deleteDatabase = universe.deleteDatabase
-
-    await universe.connectToDatabaseWorker()
-
     await startApi(3004)
 
     client = new ApiClient(3004)
   })
 
   beforeEach(async () => {
-    await universe.mockUniverse()
-
     const userPayload = {
       email: 'test@test.com',
       password: 'aaaaaaaa'
@@ -38,17 +27,9 @@ describe('User API', () => {
       body: { token: bodyToken }
     } = await client.postLogin(userPayload)
 
+    console.log(bodyToken)
+
     client.useToken(bodyToken)
-  })
-
-  afterEach(async () => {
-    jest.restoreAllMocks()
-
-    await deleteDatabase()
-  })
-
-  afterAll(async () => {
-    await stopApi()
   })
 
   describe('GET /', () => {
@@ -73,8 +54,6 @@ describe('User API', () => {
       const { status } = await client.postUser(updaterUserPayload)
 
       const user = await db.users().findOne({})
-
-      console.log(user)
 
       expect(user.first_name).toBe('John')
       expect(user.last_name).toBe('Lennon')

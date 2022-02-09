@@ -1,46 +1,13 @@
-const { startApi, stopApi } = require('../../src/api')
-const { ApiClient } = require('../ApiClient')
-
-const { CreateTestUniverse } = require('../testUniverse')
+const { ObjectId } = require('mongodb')
 
 const { db } = require('../../src/helpers/db')
 const { createJwtToken } = require('../../src/helpers/jwt')
-const { ObjectId } = require('mongodb')
 
 const { authMiddleware } = require('../../src/middleware/authMiddleware')
 
-let deleteDatabase
-let universe
-let seedDatabase
+const { seedDatabase } = require('../jest.seed')
 
 describe('Middleware API', () => {
-  beforeAll(async () => {
-    universe = new CreateTestUniverse()
-
-    deleteDatabase = universe.deleteDatabase
-    seedDatabase = universe.seedDatabase
-
-    await universe.connectToDatabaseWorker()
-
-    await startApi(3003)
-
-    new ApiClient(3003)
-  })
-
-  beforeEach(async () => {
-    await universe.mockUniverse()
-  })
-
-  afterEach(async () => {
-    jest.restoreAllMocks()
-
-    await deleteDatabase()
-  })
-
-  afterAll(async () => {
-    await stopApi()
-  })
-
   describe('Auth', () => {
     let userToken
     let userId

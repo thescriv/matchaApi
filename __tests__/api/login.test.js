@@ -1,43 +1,20 @@
-const { startApi, stopApi } = require('../../src/api')
-const { ApiClient } = require('../ApiClient')
+const { ObjectId } = require('mongodb')
 
-const { CreateTestUniverse } = require('../testUniverse')
+const { startApi } = require('../../src/api')
 
 const { db } = require('../../src/helpers/db')
 const { decodeJwtToken } = require('../../src/helpers/jwt')
-const { ObjectId } = require('mongodb')
+
+const { ApiClient } = require('../ApiClient')
+const { testCatchError } = require('../jest.utils')
 
 let client
-let testCatchError
-let deleteDatabase
-let universe
 
 describe('Login API', () => {
   beforeAll(async () => {
-    universe = new CreateTestUniverse()
-
-    testCatchError = universe.testCatchError
-    deleteDatabase = universe.deleteDatabase
-
-    await universe.connectToDatabaseWorker()
-
     await startApi(3001)
 
     client = new ApiClient(3001)
-  })
-
-  beforeEach(async () => {
-    await universe.mockUniverse()
-  })
-
-  afterEach(async () => {
-    jest.restoreAllMocks()
-
-    await deleteDatabase()
-  })
-
-  afterAll(async () => {
-    await stopApi()
   })
 
   describe('POST /login', () => {

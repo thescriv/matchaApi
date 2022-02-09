@@ -31,8 +31,17 @@ function closeConnection() {
   }
 }
 
+function getDbClient() {
+  return client.db(dbName)
+}
+
 function users() {
   return client.db(dbName).collection('users')
 }
 
-module.exports = { createConnection, closeConnection, db: { users } }
+module.exports = {
+  createConnection,
+  closeConnection,
+  getDbClient,
+  db: { users }
+}

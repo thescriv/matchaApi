@@ -1,6 +1,9 @@
 {
   "name": "matchaapi",
   "jest": {
+    "setupFilesAfterEnv": [
+      "./__tests__/jest.setup.js"
+    ],
     "testMatch": [
       "**/__tests__/**/*.test.js"
     ]
@@ -11,7 +14,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "jest",
+    "test": "NODE_ENV=test jest",
     "prepare": "husky install",
     "lint": "eslint -c .eslintrc.js './src/**/*.js'"
   },
