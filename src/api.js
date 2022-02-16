@@ -5,6 +5,7 @@ const bodyParser = require('koa-bodyparser')
 const cors = require('@koa/cors')
 
 const { createConnection, closeConnection } = require('./helpers/db')
+const { logger } = require('./helpers/logger')
 
 const { globalMiddleware } = require('./middleware/globalMiddleware')
 const { handleErrorMiddleware } = require('./middleware/handleError')
@@ -15,6 +16,8 @@ const loginRouter = require('./api/login/login.index')
 const userRouter = require('./api/user/user.index')
 
 const config = require('./config')
+
+const log = logger.child({ func: 'startApi' })
 
 let server = null
 
@@ -37,7 +40,7 @@ async function startApi(port) {
   app.use(userRouter)
 
   server = app.listen(port || config.API_PORT, () => {
-    console.log(`Listening on port ${port || config.API_PORT}`)
+    log.info(`Listening on port ${port || config.API_PORT}`)
   })
 }
 
@@ -52,7 +55,7 @@ async function stopApi() {
     closeConnection()
   ])
 
-  console.log('Closing server...')
+  log.info('Closing server...')
 }
 
 module.exports = { startApi, stopApi }

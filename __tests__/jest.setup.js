@@ -11,8 +11,6 @@ beforeAll(async () => {
 })
 
 beforeEach(() => {
-  config.MIDDLEWARE_ERROR_LOGGER = false
-
   restoreDate()
 
   mockCrypto()

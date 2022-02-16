@@ -27,8 +27,6 @@ describe('User API', () => {
       body: { token: bodyToken }
     } = await client.postLogin(userPayload)
 
-    console.log(bodyToken)
-
     client.useToken(bodyToken)
   })
 

@@ -21,7 +21,6 @@ function decodeJwtToken(token) {
 }
 
 function verifyJwtToken(token, userSecretKey) {
-  console.log('verifying token')
   try {
     jwt.verify(token, config.JWT_SECRET_KEY + userSecretKey, {
       algorithm: 'HS256'

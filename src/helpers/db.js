@@ -1,7 +1,10 @@
 const { MongoClient } = require('mongodb')
 const config = require('../config')
 
+const { logger } = require('./logger')
+
 const client = new MongoClient(config.MONGO_URL)
+const log = logger.child({ func: 'db' })
 
 let dbPromise
 let dbName
@@ -13,21 +16,21 @@ async function createConnection(databaseName = config.MONGO_DATABASE_NAME) {
 
   dbName = databaseName
 
-  console.log('Initalize connection to Database...')
+  log.info('Initalize connection to Database...')
   dbPromise = await client.connect()
-  console.log('Connected to Database')
+  log.info('Connected to Database')
 
   return dbPromise
 }
 
 function closeConnection() {
-  console.log('closing connection')
+  log.info('closing connection')
   if (dbPromise) {
     dbPromise.close()
 
-    console.log('Connection Closed.')
+    log.info('Connection Closed.')
   } else {
-    console.log('connection already Closed.')
+    log.info('connection already Closed.')
   }
 }
 

@@ -1,10 +1,14 @@
 const { startApi } = require('./src/api')
 
+const { logger } = require('./src/helpers/logger')
+
+const log = logger.child({ func: 'index' })
+
 async function main() {
   try {
     await startApi()
   } catch (err) {
-    console.error({ err })
+    log.error({ err })
   }
 }
 
