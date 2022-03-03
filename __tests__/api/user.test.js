@@ -58,5 +58,43 @@ describe('User API', () => {
 
       expect(status).toBe(204)
     })
+
+    test('do update my profile (Email is updated)', async () => {
+      const updaterUserPayload = {
+        first_name: 'John',
+        last_name: 'Lennon',
+        email: 'abc@abc.com'
+      }
+
+      const { status } = await client.postUser(updaterUserPayload)
+
+      const user = await db.users().findOne({})
+
+      expect(user.first_name).toBe('John')
+      expect(user.last_name).toBe('Lennon')
+      expect(user.email).toBe('abc@abc.com')
+      expect(user.secret_key).toBe('aaaaaaaa')
+
+      expect(status).toBe(204)
+    })
+
+    test('do update my profile (Password is updated)', async () => {
+      const updaterUserPayload = {
+        first_name: 'John',
+        last_name: 'Lennon',
+        password: 'foobar'
+      }
+
+      const { status } = await client.postUser(updaterUserPayload)
+
+      const user = await db.users().findOne({})
+
+      expect(user.first_name).toBe('John')
+      expect(user.last_name).toBe('Lennon')
+      expect(user.password).toBe('foobar')
+      expect(user.secret_key).toBe('aaaaaaaa')
+
+      expect(status).toBe(204)
+    })
   })
 })

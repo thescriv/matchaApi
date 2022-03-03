@@ -22,6 +22,14 @@ class ApiClient {
     return res
   }
 
+  async postLike(userLiked) {
+    const res = await superagent
+      .post(`${this.apiUrl}/like/${userLiked}`)
+      .set('Authorization', `Bearer ${this.token}`)
+
+    return res
+  }
+
   async getUser() {
     const res = await superagent
       .get(`${this.apiUrl}/user`)

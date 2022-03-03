@@ -2,6 +2,7 @@ const { db } = require('../src/helpers/db')
 
 async function cleanDatabase() {
   await db.users().deleteMany({})
+  await db.matchs().deleteMany({})
 }
 
 async function testCatchError(callbackFunction) {

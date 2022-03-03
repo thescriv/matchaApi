@@ -29,7 +29,7 @@ async function updateMeController(ctx) {
   }
 
   if (body.password || body.email) {
-    userUpdater.secret_key = hashString(body.email, body.password)
+    userUpdater.$set.secret_key = hashString(body.email, body.password)
   }
 
   await db.users().updateOne({ _id: userId }, userUpdater)

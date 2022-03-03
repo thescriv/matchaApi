@@ -42,9 +42,18 @@ function users() {
   return client.db(dbName).collection('users')
 }
 
+function matchs() {
+  return client.db(dbName).collection('matched')
+}
+
+const db = {
+  users,
+  matchs
+}
+
 module.exports = {
   createConnection,
   closeConnection,
   getDbClient,
-  db: { users }
+  db
 }
