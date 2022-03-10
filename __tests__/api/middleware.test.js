@@ -12,7 +12,7 @@ describe('Middleware API', () => {
     let userToken
     let userId
     let nextMockedFn
-    let ctxMockedFn
+    let ctxMocked
 
     beforeEach(async () => {
       await seedDatabase(['users'])
@@ -27,7 +27,7 @@ describe('Middleware API', () => {
         .fn()
         .mockImplementation(() => new Promise((resolve) => resolve()))
 
-      ctxMockedFn = {
+      ctxMocked = {
         headers: {
           authorization: 'Bearer ' + userToken
         }
@@ -35,19 +35,19 @@ describe('Middleware API', () => {
     })
 
     test('do pass auth', async () => {
-      await authMiddleware(ctxMockedFn, nextMockedFn)
+      await authMiddleware(ctxMocked, nextMockedFn)
 
-      expect(userId.equals(new ObjectId(ctxMockedFn.auth.userId))).toBe(true)
+      expect(userId.equals(new ObjectId(ctxMocked.auth.userId))).toBe(true)
     })
 
     test('do pass auth (no token send)', async () => {
-      ctxMockedFn = {
+      ctxMocked = {
         headers: {}
       }
 
-      await authMiddleware(ctxMockedFn, nextMockedFn)
+      await authMiddleware(ctxMocked, nextMockedFn)
 
-      expect(ctxMockedFn.auth.userId).toBe(null)
+      expect(ctxMocked.auth.userId).toBe(null)
     })
 
     test('do not pass auth (user does not exist)', async () => {
@@ -56,12 +56,12 @@ describe('Middleware API', () => {
       let error
 
       try {
-        await authMiddleware(ctxMockedFn, nextMockedFn)
+        await authMiddleware(ctxMocked, nextMockedFn)
       } catch (err) {
         error = err
       }
 
-      expect(error.message).toBe('token is invalid')
+      expect(error.message).toBe('token.invalid')
     })
 
     test('do not pass auth token signature is invalid', async () => {
@@ -70,12 +70,12 @@ describe('Middleware API', () => {
       let error
 
       try {
-        await authMiddleware(ctxMockedFn, nextMockedFn)
+        await authMiddleware(ctxMocked, nextMockedFn)
       } catch (err) {
         error = err
       }
 
-      expect(error.message).toBe('token is invalid')
+      expect(error.message).toBe('token.invalid')
     })
   })
 })

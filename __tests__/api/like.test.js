@@ -89,7 +89,7 @@ describe('Like API', () => {
         client.postLike('000000000000000000000000')
       )
 
-      expect(body.message).toBe('User does not exist')
+      expect(body.message).toBe('user.does_not_exist')
       expect(status).toBe(403)
     })
 
@@ -102,7 +102,7 @@ describe('Like API', () => {
         client.postLike(userLikedId)
       )
 
-      expect(body.message).toBe('User already liked')
+      expect(body.message).toBe('user.already_liked')
       expect(status).toBe(409)
     })
 
@@ -115,7 +115,7 @@ describe('Like API', () => {
         client.postLike(userLikedId)
       )
 
-      expect(body.message).toBe('User already matched')
+      expect(body.message).toBe('user.already_matched')
       expect(status).toBe(409)
     })
   })

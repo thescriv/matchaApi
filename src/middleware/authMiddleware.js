@@ -23,13 +23,13 @@ async function authMiddleware(ctx, next) {
       .findOne({ _id: userId }, { projection: { _id: 0, secret_key: 1 } })
 
     if (!user) {
-      throw createError(401, 'token is invalid', { help: 'token is invalid' })
+      throw createError(401, 'token.invalid')
     }
 
     if (verifyJwtToken(token, user.secret_key)) {
       ctx.auth.userId = userId
     } else {
-      throw createError(401, 'token is invalid', { help: 'token is invalid' })
+      throw createError(401, 'token.invalid')
     }
   }
 

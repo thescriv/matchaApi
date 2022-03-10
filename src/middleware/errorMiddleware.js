@@ -2,9 +2,11 @@ const config = require('../config')
 
 const { logger } = require('../helpers/logger')
 
-const log = logger.child({ func: 'handleErrorMiddleware' })
+const { translate } = require('../helpers/i18n')
 
-async function handleErrorMiddleware(ctx, next) {
+const log = logger.child({ func: 'errorMiddleware' })
+
+async function errorMiddleware(ctx, next) {
   try {
     await next()
   } catch (err) {
@@ -14,7 +16,7 @@ async function handleErrorMiddleware(ctx, next) {
 
     const error = {
       message: errorMessage,
-      help: err?.help || errorMessage
+      help: translate(err?.help || errorMessage)
     }
 
     if (config.MIDDLEWARE_ERROR_LOGGER) {
@@ -25,4 +27,4 @@ async function handleErrorMiddleware(ctx, next) {
   }
 }
 
-module.exports = { handleErrorMiddleware }
+module.exports = { errorMiddleware }

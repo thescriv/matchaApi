@@ -47,7 +47,8 @@ describe('Login API', () => {
         client.postLogin(userPayload)
       )
 
-      expect(body.message).toBe('user not found')
+      expect(body.message).toBe('user.does_not_exist')
+      expect(body.help).toBe('user.does_not_exist')
 
       expect(status).toBe(404)
     })

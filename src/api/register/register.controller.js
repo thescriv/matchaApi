@@ -1,10 +1,12 @@
-const createError = require('http-errors')
-
 const { db } = require('../../helpers/db')
 
 const { validateRegisterController } = require('./register.schema')
 
 const { createNewUser } = require('./register.lib')
+
+const { logger } = require('../../helpers/logger')
+
+const log = logger.child({ func: 'startApi' })
 
 async function postRegisterController(ctx) {
   const {
@@ -17,15 +19,13 @@ async function postRegisterController(ctx) {
     .users()
     .countDocuments({ email: body.email })
 
-  if (emailAlreadyExist) {
-    throw createError(400, 'Email already taken', {
-      help: 'Sorry email already taken.'
-    })
+  if (!emailAlreadyExist) {
+    const newUser = createNewUser(body)
+
+    await db.users().insertOne(newUser)
+  } else {
+    log.info('email already used')
   }
-
-  const newUser = createNewUser(body)
-
-  await db.users().insertOne(newUser)
 
   ctx.body = {}
 }

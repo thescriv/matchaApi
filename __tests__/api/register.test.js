@@ -36,15 +36,13 @@ describe('Register API', () => {
       expect(status).toBe(204)
     })
 
-    test('do not register user (email already exist)', async () => {
+    test('do not register user (email already used)', async () => {
       await db.users().insertOne(registerPayload)
 
-      const { body, status } = await testCatchError(() =>
-        client.postRegister(registerPayload)
-      )
+      const { status } = await client.postRegister(registerPayload)
 
-      expect(body.message).toBe('Email already taken')
-      expect(status).toBe(400)
+      expect(status).toBe(204)
+      expect(await db.users().countDocuments()).toBe(1)
     })
 
     test('do not register user (validationFail)', async () => {

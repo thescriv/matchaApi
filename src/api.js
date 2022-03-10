@@ -8,7 +8,7 @@ const { createConnection, closeConnection } = require('./helpers/db')
 const { logger } = require('./helpers/logger')
 
 const { globalMiddleware } = require('./middleware/globalMiddleware')
-const { handleErrorMiddleware } = require('./middleware/handleError')
+const { errorMiddleware } = require('./middleware/errorMiddleware')
 const { authMiddleware } = require('./middleware/authMiddleware')
 
 const registerRouter = require('./api/register/register.index')
@@ -33,7 +33,7 @@ async function startApi(port) {
   app.use(cors())
 
   app.use(globalMiddleware)
-  app.use(handleErrorMiddleware)
+  app.use(errorMiddleware)
   app.use(authMiddleware)
 
   app.use(registerRouter)
