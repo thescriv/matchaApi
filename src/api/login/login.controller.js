@@ -1,9 +1,5 @@
-const { hashString } = require('../../helpers/hash')
-const { createJwtToken } = require('../../helpers/jwt')
-
 const { validatePostLoginController } = require('./login.schema')
-
-const { findUserAndAssertExist } = require('../../lib/users')
+const { postLoginUser } = require('./login.lib')
 
 async function postLoginController(ctx) {
   const {
@@ -12,14 +8,7 @@ async function postLoginController(ctx) {
 
   validatePostLoginController(body)
 
-  const hashedPassword = hashString(body.password)
-
-  const user = await findUserAndAssertExist(
-    { email: body.email, password: hashedPassword },
-    { projection: { secret_key: 1 } }
-  )
-
-  const userToken = createJwtToken(user._id.toHexString(), user.secret_key)
+  const userToken = await postLoginUser(body)
 
   ctx.body = { token: userToken }
 }

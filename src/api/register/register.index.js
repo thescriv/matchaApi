@@ -1,9 +1,9 @@
 const Router = require('@koa/router')
 
-const { postRegisterController } = require('./register.controller')
+const { postRegisterUserController } = require('./register.controller')
 
 const router = new Router()
 
-router.post('/register', postRegisterController)
+router.post('/register', postRegisterUserController)
 
 module.exports = router.routes()

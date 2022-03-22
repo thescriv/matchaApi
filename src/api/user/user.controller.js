@@ -1,7 +1,7 @@
 const { db } = require('../../helpers/db')
 const { validateUpdateMeController } = require('./user.schema')
 
-const { hashString } = require('../../helpers/hash')
+const { updateUser } = require('./user.lib')
 
 async function getMeController(ctx) {
   const {
@@ -21,18 +21,7 @@ async function updateMeController(ctx) {
 
   validateUpdateMeController(body)
 
-  const userUpdater = {
-    $set: {
-      ...body,
-      updated_at: Date.now()
-    }
-  }
-
-  if (body.password || body.email) {
-    userUpdater.$set.secret_key = hashString(body.email, body.password)
-  }
-
-  await db.users().updateOne({ _id: userId }, userUpdater)
+  await updateUser(userId, body)
 
   ctx.body = {}
 }

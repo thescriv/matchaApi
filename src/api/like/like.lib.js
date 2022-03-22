@@ -2,6 +2,26 @@ const createError = require('http-errors')
 
 const { db } = require('../../helpers/db')
 
+async function sendLikeOrCreateMatch(userId, userLikedId) {
+  const mutualLike = await db
+    .users()
+    .findOne({ _id: userLikedId, like: userId })
+
+  if (mutualLike) {
+    await Promise.all([
+      db.matchs().insertOne({ user_id_1: userId, user_id_2: userLikedId }),
+      db.users().updateOne({ _id: userLikedId }, { $pull: { like: userId } })
+    ])
+  } else {
+    await db
+      .users()
+      .updateOne(
+        { _id: userId },
+        { $push: { like: { $each: [userLikedId], $position: 0 } } }
+      )
+  }
+}
+
 async function checkUserIsAlreadyLiked(userId, userLikedId) {
   const alreadyLiked = await db
     .users()
@@ -31,4 +51,8 @@ async function checkUserIsAlreadyMatched(firstUserId, secondUserId) {
   }
 }
 
-module.exports = { checkUserIsAlreadyLiked, checkUserIsAlreadyMatched }
+module.exports = {
+  checkUserIsAlreadyLiked,
+  checkUserIsAlreadyMatched,
+  sendLikeOrCreateMatch
+}
