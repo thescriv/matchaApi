@@ -11,10 +11,7 @@ const { globalMiddleware } = require('./middleware/globalMiddleware')
 const { errorMiddleware } = require('./middleware/errorMiddleware')
 const { authMiddleware } = require('./middleware/authMiddleware')
 
-const registerRouter = require('./api/register/register.index')
-const loginRouter = require('./api/login/login.index')
-const userRouter = require('./api/user/user.index')
-const likeRouter = require('./api/like/like.index')
+const router = require('./api/router')
 
 const config = require('./config')
 
@@ -36,10 +33,7 @@ async function startApi(port) {
   app.use(errorMiddleware)
   app.use(authMiddleware)
 
-  app.use(registerRouter)
-  app.use(loginRouter)
-  app.use(userRouter)
-  app.use(likeRouter)
+  app.use(router)
 
   server = app.listen(port || config.API_PORT, () => {
     log.info(`Listening on port ${port || config.API_PORT}`)
