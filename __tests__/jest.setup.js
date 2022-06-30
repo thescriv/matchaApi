@@ -12,7 +12,9 @@ beforeAll(async () => {
   nock.disableNetConnect()
   nock.enableNetConnect('localhost')
 
-  await createConnection(`test-${config.JEST_WORKER_ID}`)
+  await createConnection(
+    `${config.MONGO_DATABASE_NAME}-${config.JEST_WORKER_ID}`
+  )
 })
 
 beforeEach(() => {
@@ -31,7 +33,7 @@ afterEach(async () => {
 afterAll(async () => {
   nock.enableNetConnect()
 
-  await getDbClient().dropDatabase()
+  // await getDbClient().dropDatabase()
 
   await stopApi()
 })

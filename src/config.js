@@ -6,7 +6,7 @@ module.exports = {
   JWT_SECRET_KEY: process.env.JWT_SECRET_KEY || 'foobar',
   LOGGER_LEVEL: process.env.LOGGER_LEVEL || 'trace',
   MIDDLEWARE_ERROR_LOGGER: process.env.MIDDLEWARE_ERROR_LOGGER === 'true',
-  MONGO_DATABASE_NAME: process.env.MONGO_DATABASE_NAME || 'test',
+  MONGO_DATABASE_NAME: process.env.MONGO_DATABASE_NAME || 'testMatchApi',
   MONGO_URL: process.env.MONGO_URL || 'mongodb://localhost:27017',
   NODE_ENV: process.env.NODE_ENV || 'local'
 }
